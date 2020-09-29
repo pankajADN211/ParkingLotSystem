@@ -1,6 +1,4 @@
 package com.example.parking.model;
-
-
 /*
  * It contains all the fields for generating core.Parking ticket.
  */
@@ -23,9 +21,9 @@ public class Parking {
 
     public Parking() {
         this.uniqueId = "";
-        this.floor = 0;
-        this.row = 0;
-        this.car = null;
+        this.floor = -1;
+        this.row = -1;
+        this.car = new Car();
         this.entryDate = "";
         this.entryTime = "";
         this.exitDate = "";

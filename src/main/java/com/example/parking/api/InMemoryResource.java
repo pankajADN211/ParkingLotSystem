@@ -1,54 +1,46 @@
 package com.example.parking.api;
 
 import com.example.parking.model.Car;
-
+import com.example.parking.model.Response;
 import com.example.parking.service.admin.InMemoryAdmin;
 import com.example.parking.service.dbClients.InMemoryDB;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/in_memory")
+@RequestMapping(value = "/inMemory")
 public class InMemoryResource {
 
     @Autowired
-    private InMemoryDB inMemoryDB = new InMemoryDB();
+    private final InMemoryDB inMemoryDB = new InMemoryDB();
 
     @Autowired
-    private InMemoryAdmin inMemoryAdmin = new InMemoryAdmin();
+    private final InMemoryAdmin inMemoryAdmin = new InMemoryAdmin();
 
-
-    @RequestMapping(value = "/generate_ticket",method = RequestMethod.POST)
-    public Map<String, String> generateEntryTicket(@RequestBody Car car){
-
+    @RequestMapping(value = "/generateTicket",method = RequestMethod.POST)
+    public Response generateEntryTicket(@RequestBody Car car){
         return inMemoryDB.generateEntryTicket(car);
     }
 
-
-    @RequestMapping(value = "/exit_ticket", method = RequestMethod.GET)
-    public Map<String, String> exitTheTicket(@RequestParam(value = "id") String id){
+    @RequestMapping(value = "/exitTicket")
+    public Response exitTheTicket(@RequestParam(value = "id") String id){
         return inMemoryDB.exitTheTicket(id);
     }
 
-    @RequestMapping(value = "/details_from_regnum", method = RequestMethod.GET)
-    public List<Map<String, String>> detailsFromRegNum(@RequestParam String regNum){
+    @RequestMapping(value = "/detailsFromRegistrationNumber", method = RequestMethod.GET)
+    public List<Response> detailsFromRegNum(@RequestParam String regNum){
         return inMemoryAdmin.detailsFromRegNum(regNum);
     }
 
-    @RequestMapping(value = "/details_from_color", method = RequestMethod.GET)
-    public List<Map<String, String>> detailsFromColor(@RequestParam String color){
+    @RequestMapping(value = "/detailsFromColor", method = RequestMethod.GET)
+    public List<Response> detailsFromColor(@RequestParam String color){
         return inMemoryAdmin.detailsFromColor(color);
     }
 
-    @RequestMapping(value = "/all_parked_cars", method = RequestMethod.GET)
-    public List<Map<String,String>> allParkedCars(){
+    @RequestMapping(value = "/allParkedCars", method = RequestMethod.GET)
+    public List<Response> allParkedCars(){
         return inMemoryAdmin.allParkedCars();
     }
-
-
-
 
 }

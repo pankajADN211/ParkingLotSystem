@@ -7,11 +7,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Car {
     // We don't want user know our real class attributes
-    @JsonProperty("number")
+    @JsonProperty("regNum")
     private String registrationNumber;
 
     @JsonProperty("color")
     private String color;
+
+    public Car() {
+        this.registrationNumber = "";
+        this.color = "";
+    }
 
     public String getRegistrationNumber() {
         return registrationNumber;

@@ -4,6 +4,7 @@ import com.example.parking.ParkingLotManager;
 import com.example.parking.model.Car;
 import com.example.parking.model.Parking;
 
+import com.example.parking.model.Response;
 import org.springframework.stereotype.Component;
 import com.example.parking.service.dbClients.dbClass.dbBaseClass;
 import java.text.SimpleDateFormat;
@@ -32,32 +33,24 @@ public class InMemoryDB implements dbBaseClass{
     }
 
     @Override
-    public Map<String,String> generateEntryTicket(Car car) {
+    public Response generateEntryTicket(Car car) {
         try {
-
-            Map<String,String> mp = new LinkedHashMap<>();
+            Response response = new Response();
             /*
              * CHECK IF THIS CAR ALREADY IN OUR PARKING LOT.
              */
             Parking park = new Parking();
             if(checkCarInParkingLot(car.getRegistrationNumber())){
-
-                mp.put("Message","The Car with the Registration Number '"+car.getRegistrationNumber()+"' already in the Parking Lot");
-
-                return mp;
+                response.setMessage("The Car with the Registration Number '"+car.getRegistrationNumber()+"' already in the Parking Lot");
+                return response;
             }
-
-
-            // Assigning Parking Variables for our Database.
-
-//            SimpleDateFormat d = new SimpleDateFormat("yyMM");
             // Set Parking UniqueID
             park.setUniqueId("WLPK"  + parkingList.size());
 
             int floor = 0, row = 0;
             boolean flag=true;
-            for (int f = 0; f < ParkingLotManager.getFLOOR(); f++) {
-                for (int r = 0; r < ParkingLotManager.getROW(); r++) {
+            for (int f = 0; f < ParkingLotManager.FLOOR; f++) {
+                for (int r = 0; r < ParkingLotManager.ROW; r++) {
                     if (ParkingLotManager.parkingLot[f][r] == 0) {
                         ParkingLotManager.parkingLot[f][r] = 1;
                         floor = f;
@@ -65,17 +58,13 @@ public class InMemoryDB implements dbBaseClass{
                         flag = false;
                         break;
                     }
-
                 }
                 if (!flag) { break; }
-
             }
 
-
             if (flag) {
-                mp.put("Message","SORRY OUR PARKING IS FULL");
-
-                return mp;
+                response.setMessage("SORRY OUR PARKING IS FULL");
+                return response;
             }
 
             // Setting allotted parking floor and row.
@@ -90,20 +79,9 @@ public class InMemoryDB implements dbBaseClass{
             park.setEntryTime(time.format(new Date()));
 
             parkingList.add(park);
-
             // Generating Ticket
-
-            mp.put("TicketId",park.getUniqueId());
-            mp.put("Floor",Integer.toString(park.getFloor()));
-            mp.put("Row",Integer.toString(park.getRow()));
-            mp.put("Registration Number",park.getCar().getRegistrationNumber().toUpperCase());
-            mp.put("Color", park.getCar().getColor().toUpperCase());
-            mp.put("Entry Date",park.getEntryDate());
-            mp.put("Entry Time", park.getEntryTime());
-            mp.put("Exit Date",park.getExitDate());
-            mp.put("Exit Time",park.getExitTime());
-
-            return mp;
+            response.setParking(park);
+            return response;
         }
         catch(Exception e) {
 
@@ -115,17 +93,15 @@ public class InMemoryDB implements dbBaseClass{
     }
 
     @Override
-    public Map<String, String > exitTheTicket(String id) {
-        try{
+    public Response exitTheTicket(String id) {
+        try
+        {
+            Response response = new Response();
             id = id.toUpperCase();
             Parking park;
             Iterator<Parking> parkIt= parkingList.iterator();
-            Map<String,String> mp = new LinkedHashMap<>();
-
             //Exit the car entering Ticket ID
-
             boolean flag = true;
-
             // Iterate the List to check ticket is exist or not
             while(parkIt.hasNext()){
                 park = parkIt.next();
@@ -134,26 +110,14 @@ public class InMemoryDB implements dbBaseClass{
                     if(park.getExitDate().equalsIgnoreCase("")){
                         park.setExitDate(date.format(new Date()));
                         park.setExitTime(time.format(new Date()));
-
                         // freeing the space in parking lot
                         ParkingLotManager.parkingLot[park.getFloor()-1][park.getRow()-1]=0;
-                        // Generating Ticket
-
-                        mp.put("TicketId",park.getUniqueId());
-                        mp.put("Floor",Integer.toString(park.getFloor()));
-                        mp.put("Row",Integer.toString(park.getRow()));
-                        mp.put("Registration Number",park.getCar().getRegistrationNumber().toUpperCase());
-                        mp.put("Color", park.getCar().getColor().toUpperCase());
-                        mp.put("Entry Date",park.getEntryDate());
-                        mp.put("Entry Time", park.getEntryTime());
-                        mp.put("Exit Date",park.getExitDate());
-                        mp.put("Exit Time",park.getExitTime());
-
+                        response.setParking(park);
                     }
                     // Expired Ticket is used
                     else {
-                        mp.put("Message","Ticket Is Already Expired");
-                        return mp;
+                        response.setMessage("Ticket Is Already Expired");
+                        return response;
                     }
                     flag = false;
                     break;
@@ -161,13 +125,11 @@ public class InMemoryDB implements dbBaseClass{
             }
             // Ticket does not exist.
             if(flag){
-                mp.put("Message","Ticket ID is Not Valid");
-                return mp;
+                response.setMessage("Ticket ID is Not Valid");
+                return response;
 
             }
-            return mp;
-
-
+            return response;
         }
         catch(Exception e) {
             e.printStackTrace();

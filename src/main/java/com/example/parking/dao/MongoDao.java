@@ -3,7 +3,6 @@ package com.example.parking.dao;
 import com.example.parking.model.Parking;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository

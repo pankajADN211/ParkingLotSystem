@@ -1,20 +1,19 @@
 package com.example.parking.service.admin.adminclass;
 
-
+import com.example.parking.model.Response;
 import java.util.List;
-import java.util.Map;
 
-public interface adminservice {
+public interface adminService {
 
     // Registration numbers of all cars of a Particular color
 //    String carsFromColor(String color);
 
     // Slot number in which a car with a given registration number is parked
-    List<Map<String,String>> detailsFromRegNum (String regNumber);
+    List<Response> detailsFromRegNum (String regNumber);
 
     // Slot numbers of all slots where a car of a particular color is parked
-    List<Map<String,String>> detailsFromColor(String color);
+    List<Response> detailsFromColor(String color);
 
     // Get all cars available in Parking LOT
-    List<Map<String,String>> allParkedCars();
+    List<Response> allParkedCars();
 }
