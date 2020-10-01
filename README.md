@@ -1,7 +1,7 @@
 # ParkingLotSystem  
   
 #### To run the jar on docker
-* open the terminal goto root directory of project and run following docker command  
+* after generating the JAR using intellij, open the terminal goto root directory of project and run following docker command  
 * docker-compose up  
   
 #### APIs to run on browser  
