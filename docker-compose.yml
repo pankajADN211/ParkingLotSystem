@@ -1,0 +1,15 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: "mongodb"
+    ports:
+      - 27017:27017
+  parking:
+    build:
+      context: .
+    image: parking-lot-manager:latest
+    container_name: parking
+    network_mode: host
+    ports:
+      - 8080:8080
