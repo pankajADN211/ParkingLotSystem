@@ -4,7 +4,7 @@
 * after generating the JAR using intellij, open the terminal goto root directory of project and run following docker command  
 * `docker-compose up`  
   
-#### APIs to run on browser  
+#### APIs to run on Postman  
 * `localhost:8080`
   * home page
 * `localhost:8080/parking/generateTicket`  
